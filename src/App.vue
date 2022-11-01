@@ -17,7 +17,7 @@ export default {
         // direction 页面切换的过渡动画，配合transition组件使用
         direction: "slide-left",
         // touchLeft 划动起点界限，起点在靠近屏幕左侧时才有效
-        touchLeft: swidth*2/5,
+        touchLeft: swidth * 2 / 5,
         // touchStartPoint 记录起始点X坐标
         touchStartPoint: 0,
         // distance 记录划动的距离
@@ -41,9 +41,19 @@ export default {
             }
         }
     },
-
+    created() { 
+ 
+        this.$http.post('/api/api/serverconfig',{});
+        this.query_bind()
+    },
     methods: {
-        bodyTouchStart: function(event) {
+        query_bind(){
+            this.$http.post('/api/school/querybind?cookie=Nvl4TJUEBCqB2dTF0qFBDML1MPawrGHi',{
+                name:'',
+                id:1000
+            })
+        },
+        bodyTouchStart: function (event) {
             this.backBtn = document.getElementById("navback");
             if (this.backBtn) {
                 // 获得起点X坐标，初始化distance为0
@@ -51,7 +61,7 @@ export default {
                 this.distance = 0;
             }
         },
-        bodyTouchMove: function(event) {
+        bodyTouchMove: function (event) {
             if (this.backBtn && this.touchStartPoint < this.touchLeft) {
                 // 只监听单指划动，多指划动不作响应
                 if (event.targetTouches.length > 1) {
@@ -69,7 +79,7 @@ export default {
                 }
             }
         },
-        bodyTouchEnd: function(event) {
+        bodyTouchEnd: function (event) {
             if (this.backBtn && this.touchStartPoint < this.touchLeft) {
                 // 划动结束，重置数据
                 this.touchStartPoint = 0;
@@ -79,9 +89,9 @@ export default {
                     // 返回前修改样式，让过渡动画看起来更快
                     document.getElementById("app").classList.add("quickback");
                     this.$router.back();
-                    setTimeout(function(){
+                    setTimeout(function () {
                         document.getElementById("app").classList.remove("quickback");
-                    },250)
+                    }, 250)
                 }
             }
         }
@@ -96,6 +106,7 @@ export default {
     width: 100%;
     overflow-x: hidden;
 }
+
 .appView {
     position: absolute;
     width: 100%;
@@ -103,18 +114,23 @@ export default {
     min-height: 100vh;
     transition: transform 0.24s ease-out;
 }
-#app.quickback .appView{
+
+#app.quickback .appView {
     transition-duration: 0.1s;
 }
+
 .slide-left-enter {
     transform: translate(100%, 0);
 }
+
 .slide-left-leave-active {
     transform: translate(-50%, 0);
 }
+
 .slide-right-enter {
     transform: translate(-50%, 0);
 }
+
 .slide-right-leave-active {
     transform: translate(100%, 0);
 }
